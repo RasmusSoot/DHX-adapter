@@ -1,0 +1,26 @@
+version: "2"
+services:
+  postgres:
+    image: postgres:9.6.1
+    ports:
+    - "0.0.0.0:5432:5432"
+    volumes:
+    - data:/var/lib/postgresql/data
+    - "./dbscripts/init_postgres_database.sql:/docker-entrypoint-initdb.d/init_postgres_database.sql"
+    environment:
+    - POSTGRES_PASSWORD=secret
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=dhx_adapter
+
+  dhx-adapter:
+    image: tomcat:8.5
+    ports:
+    - "0.0.0.0:8080:8080"
+    volumes:
+    - "./dhx-adapter-server/target/dhx-adapter-server.war:/usr/local/tomcat/webapps/dhx-adapter-server.war"
+    - "./src/main/resources/conf/docker/dhx-application.properties:/conf/dhx-application.properties"
+    - "./src/main/resources/conf/docker/catalina.properties:/usr/local/tomcat/conf/catalina.properties"
+    - "./src/main/resources/conf/docker/context.xml:/usr/local/tomcat/conf/context.xml"
+
+volumes:
+  data:
