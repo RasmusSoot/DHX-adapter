@@ -1,0 +1,18 @@
+dist: xenial
+language: java
+jdk:
+- openjdk8
+branches:
+  only:
+  - develop
+  - master
+before_install:
+- export TZ=Europe/Helsinki
+install: true
+script: mvn clean verify -q
+notifications:
+  email:
+    recipients:
+    - rasmus.soot@nortal.com
+    on_success: change
+    on_failure: always
