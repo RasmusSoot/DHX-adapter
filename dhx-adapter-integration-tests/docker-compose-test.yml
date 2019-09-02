@@ -46,7 +46,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/dhx-adapter-server/health"]
       interval: 1s
       timeout: 1s
-      retries: 30
+      retries: 180
     depends_on:
       postgres-hobekuul:
         condition: service_healthy
@@ -65,7 +65,7 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:8080/dhx-adapter-server/health"]
       interval: 1s
       timeout: 1s
-      retries: 30
+      retries: 180
     depends_on:
       postgres-test:
         condition: service_healthy
