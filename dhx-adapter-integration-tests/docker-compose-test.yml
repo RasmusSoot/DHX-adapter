@@ -79,7 +79,7 @@ services:
     command: '--verbose --extensions com.github.rasmussoot.wiremock.WireMockProxyTransformer'
   test:
     image: maven:3-jdk-8-slim
-    user: "1000:1000"
+    user: "${USER_ID}:${USER_ID}"
     command: "sh -c 'cd src/dhx-adapter-integration-tests && mvn -Duser.home=/var/maven clean verify'"
     volumes:
       - "../:/src"
