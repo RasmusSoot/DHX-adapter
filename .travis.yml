@@ -26,7 +26,6 @@ script:
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml build
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
 - USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from test test
-before_deploy:
 - USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from report report
 after_script:
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml down -v
