@@ -23,6 +23,8 @@ script:
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml build
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
 - USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from test test
+before_deploy:
+- USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from report report
 after_script:
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml down -v
 notifications:
@@ -31,3 +33,11 @@ notifications:
     - rasmus.soot@nortal.com
     on_success: change
     on_failure: always
+deploy:
+- provider: s3
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  region: $AWS_REGION
+  bucket: dhx-adapter-teststuff
+  skip_cleanup: true
+  local_dir: dhx-adapter-integration-tests/site/allure-maven-plugin

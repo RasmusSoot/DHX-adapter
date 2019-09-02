@@ -80,7 +80,7 @@ services:
   test:
     image: maven:3-jdk-8-slim
     user: "${USER_ID}:${USER_ID}"
-    command: "sh -c 'cd src/dhx-adapter-integration-tests && mvn -Duser.home=/var/maven clean verify'"
+    command: "sh -c 'cd src/dhx-adapter-integration-tests && mvn -Duser.home=/var/maven -B clean verify'"
     volumes:
       - "../:/src"
       - "~/.m2:/var/maven/.m2"
@@ -93,7 +93,15 @@ services:
         condition: service_healthy
       dhx-adapter-hobekuul:
         condition: service_healthy
-
+  report:
+    image: maven:3-jdk-8-slim
+    user: "${USER_ID}:${USER_ID}"
+    command: "sh -c 'cd src/dhx-adapter-integration-tests && mvn -Duser.home=/var/maven -B allure:report'"
+    volumes:
+    - "../:/src"
+    - "~/.m2:/var/maven/.m2"
+    environment:
+      MAVEN_CONFIG: /var/maven/.m2
 volumes:
   data-hobekuul:
   data-test:
