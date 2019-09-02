@@ -4,6 +4,9 @@ addons:
   apt:
     packages:
     - xmlstarlet
+  artifacts:
+    bucket: dhx-adapter-teststuff
+    working_dir: dhx-adapter-integration-tests/target/site/allure-maven-plugin
 services:
 - docker
 jdk:
@@ -33,11 +36,3 @@ notifications:
     - rasmus.soot@nortal.com
     on_success: change
     on_failure: always
-deploy:
-- provider: s3
-  access_key_id: $AWS_ACCESS_KEY_ID
-  secret_access_key: $AWS_SECRET_ACCESS_KEY
-  region: $AWS_REGION
-  bucket: dhx-adapter-teststuff
-  skip_cleanup: true
-  local_dir: dhx-adapter-integration-tests/site/allure-maven-plugin
