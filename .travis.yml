@@ -4,9 +4,6 @@ addons:
   apt:
     packages:
     - xmlstarlet
-  artifacts:
-    bucket: dhx-adapter-teststuff
-    working_dir: dhx-adapter-integration-tests/target/site/allure-maven-plugin
 services:
 - docker
 jdk:
@@ -26,9 +23,10 @@ script:
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml build
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
 - USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from test test
-- USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from report report
 after_script:
+- USER_ID=${UID} docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --abort-on-container-exit --exit-code-from report report
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml down -v
+- pip install --user --upgrade awscli && aws s3 cp dhx-adapter-integration-tests/target/site/allure-maven-plugin/ s3://$AWS_REPORTS_BUCKET/$TRAVIS_BUILD_NUMBER/$TRAVIS_JOB_NUMBER --recursive --acl public-read
 notifications:
   email:
     recipients:
