@@ -4,11 +4,6 @@ addons:
   apt:
     packages:
     - xmlstarlet
-  sonarcloud:
-    organization: "rasmussoot-github"
-    token:
-      secure: "nd64z2/baeUYwziNJGKCF49KnEgFTdf8J96cV2y3jXgt54ZGka6JoR+o63VBWhyMgnwW9QEYbF/RGrfjI7+Iz4OQYRFJjoOjhzDjNIJr8/dUfBkSiuM5SvtrlzqKHLSc0ECtn0k5O4+l2+p3dPV3+gMVnpEn1upSIjKDuickzmplWs2hdrvjoVa2OIJiH8i1c9cHtmy3+YX5fuVQvUntJlBsJCgoYwS/qXzTk87cl7SoxeJKnS2kJvr2fN+YCfrDcqcHMY+bL3XF6inKftLd5cyKERawe9dc0ijmRINHQf9oglcu86o0sDDpW0oOgzIGEdOVdZtKEABGdrZX2F+pj3EBF/UIxAMFXxg3liwfEracDOmzSoKsfu7JQZkwX7LjRTAtl0rUXPCWY/RhyO+zj/rKUt6K+aBzbJBR3sKmx4pVTVeL/OcJWSBWAQJlzMoVz8Dkv0kLJVR87same+01LUocmf9tU4m1b8ODrhOQLddh0XO9ZJDj8v71QuBwDjRAks+7QqHRJmaymR5HMW95fsUDW8pvTf4swMTkj5lFwtnR46BwgwIiqGobdRxjQexZBq7kDLzYBZUrgoVuf0SE+8l7XXYLzN99kP6aR69zja0dK7R7xZhdV/vcHcDRAArThNjA1TMae5mmJiqI51YDKKW6NxWuRycsjImIB9WfMlE="
-
 services:
 - docker
 jdk:
@@ -23,7 +18,7 @@ before_install:
 - mv dhx-adapter-server/pom_without_oracle.xml dhx-adapter-server/pom.xml
 install: true
 script:
-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=RasmusSoot_DHX-adapter
+- mvn clean verify -q
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml down -v
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml build
 - docker-compose -f dhx-adapter-integration-tests/docker-compose-test.yml up --exit-code-from setup-wiremock setup-wiremock
