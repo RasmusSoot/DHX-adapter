@@ -18,8 +18,8 @@ class Configuration {
         }
 
         void setDhxServiceUrl(String dhxServiceUrl) {
-            println "Setting DHX Service URL: " + (System.getenv("DHX_ADAPTER_HOBEKUUL_DHX_SERVICE_URL") ?: dhxServiceUrl)
-            this.dhxServiceUrl = System.getenv("DHX_ADAPTER_HOBEKUUL_DHX_SERVICE_URL") ?: dhxServiceUrl
+            println "Setting Hobekuul DHX Service URL: " + (System.getenv("DHX_ADAPTER_HOBEKUUL_DHX_URL") ?: dhxServiceUrl)
+            this.dhxServiceUrl = System.getenv("DHX_ADAPTER_HOBEKUUL_DHX_URL") ?: dhxServiceUrl
         }
 
         public String healthUrl
@@ -29,7 +29,7 @@ class Configuration {
         }
 
         void setHealthUrl(String healthUrl) {
-            println "Setting health URL: " + (System.getenv("DHX_ADAPTER_HOBEKUUL_HEALTH_URL") ?: healthUrl)
+            println "Setting Hobekuul health URL: " + (System.getenv("DHX_ADAPTER_HOBEKUUL_HEALTH_URL") ?: healthUrl)
             this.healthUrl = System.getenv("DHX_ADAPTER_HOBEKUUL_HEALTH_URL") ?: healthUrl
         }
     }
@@ -42,8 +42,19 @@ class Configuration {
         }
 
         void setDhxServiceUrl(String dhxServiceUrl) {
-            println "Setting Test Service URL: " + (System.getenv("DHX_ADAPTER_TEST_DHX_URL") ?: dhxServiceUrl)
+            println "Setting Test DHX Service URL: " + (System.getenv("DHX_ADAPTER_TEST_DHX_URL") ?: dhxServiceUrl)
             this.dhxServiceUrl = System.getenv("DHX_ADAPTER_TEST_DHX_URL") ?: dhxServiceUrl
+        }
+
+        public String dvkServiceUrl
+
+        String getDvkServiceUrl() {
+            return dvkServiceUrl
+        }
+
+        void setDvkServiceUrl(String dhxServiceUrl) {
+            println "Setting Test DVK Service URL: " + (System.getenv("DHX_ADAPTER_TEST_DVK_URL") ?: dhxServiceUrl)
+            this.dvkServiceUrl = System.getenv("DHX_ADAPTER_TEST_DVK_URL") ?: dhxServiceUrl
         }
 
         public String healthUrl
@@ -57,15 +68,15 @@ class Configuration {
             this.healthUrl = System.getenv("DHX_ADAPTER_TEST_HEALTH_URL") ?: healthUrl
         }
 
-        public String monitorUrl
+        public String metricsUrl
 
-        String getMonitorUrl() {
-            return monitorUrl
+        String getMetricsUrl() {
+            return metricsUrl
         }
 
-        void setMonitorUrl(String monitorUrl) {
-            println "Setting Test Monitor URL: " + (System.getenv("DHX_ADAPTER_TEST_MONITOR_URL") ?: monitorUrl)
-            this.monitorUrl = System.getenv("DHX_ADAPTER_TEST_MONITOR_URL") ?: monitorUrl
+        void setMetricsUrl(String metricsUrl) {
+            println "Setting Test Metrics URL: " + (System.getenv("DHX_ADAPTER_TEST_METRICS_URL") ?: metricsUrl)
+            this.metricsUrl = System.getenv("DHX_ADAPTER_TEST_METRICS_URL") ?: metricsUrl
         }
     }
 

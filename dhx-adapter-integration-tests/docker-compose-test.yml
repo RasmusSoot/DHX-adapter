@@ -3,9 +3,19 @@ version: "2.1"
 services:
   setup-wiremock:
     build: conf/setup
-    command: "sh -c 'curl -l https://github.com/RasmusSoot/wiremock-proxy/releases/download/v1.0/wiremock-proxy-1.0.jar -o /data/conf/wiremock/extensions/wiremock-proxy-1.0.jar && cd /data/conf/wiremock && zip stubs/__files/verificationconf.zip verificationconf/ -r'"
+    command: "sh -c 'curl -L https://github.com/RasmusSoot/wiremock-proxy/releases/download/v1.0/wiremock-proxy-1.0.jar -o /data/conf/wiremock/extensions/wiremock-proxy-1.0.jar && cd /data/conf/wiremock && zip stubs/__files/verificationconf.zip verificationconf/ -r'"
     volumes:
     - ".:/data"
+  setup-hobekuul:
+    build: conf/postgres-client
+    environment:
+    - PGPASSWORD=secret
+    command: sh -c "psql -v ON_ERROR_STOP=1 -h postgres-hobekuul -d dhx_adapter -U postgres -p 5432 -a -w -f /data/esindatavad_asutused.sql"
+    volumes:
+    - "./conf/hobekuul:/data"
+    depends_on:
+      dhx-adapter-hobekuul:
+        condition: service_healthy
   postgres-hobekuul:
     image: postgres:9.6
     volumes:
@@ -67,6 +77,8 @@ services:
       timeout: 1s
       retries: 180
     depends_on:
+      setup-hobekuul:
+        condition: service_started
       postgres-test:
         condition: service_healthy
       xroad-mock:
@@ -82,12 +94,16 @@ services:
     user: "${USER_ID}:${USER_ID}"
     command: "sh -c 'cd src/dhx-adapter-integration-tests && mvn -Duser.home=/var/maven -B clean verify'"
     volumes:
-      - "../:/src"
-      - "~/.m2:/var/maven/.m2"
+    - "../:/src"
+    - "~/.m2:/var/maven/.m2"
     environment:
       MAVEN_CONFIG: /var/maven/.m2
+      DHX_ADAPTER_TEST_DHX_URL: http://dhx-adapter-test:8080/dhx-adapter-server/ws
+      DHX_ADAPTER_TEST_DVK_URL: http://dhx-adapter-test:8080/dhx-adapter-server/wsServer
       DHX_ADAPTER_TEST_HEALTH_URL: http://dhx-adapter-test:8080/dhx-adapter-server/health
-      DHX_ADAPTER_TEST_MONITOR_URL: http://dhx-adapter-test:8080/dhx-adapter-server/health
+      DHX_ADAPTER_TEST_METRICS_URL: http://dhx-adapter-test:8080/dhx-adapter-server/metrics
+      DHX_ADAPTER_HOBEKUUL_DHX_URL: http://dhx-adapter-hobekuul:8080/dhx-adapter-server/ws
+      DHX_ADAPTER_HOBEKUUL_HEALTH_URL: http://dhx-adapter-hobekuul:8080/dhx-adapter-server/health
     depends_on:
       dhx-adapter-test:
         condition: service_healthy
